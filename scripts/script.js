@@ -21,7 +21,7 @@ function showTab(tabName) {
 function validateNumericInput(input, allowNegative = false) {
     let value = input.value;
     
-    // Remove caracteres inválidos
+    // Remove caracteres inválidos. Se allowNegative for true, permite o sinal '-', caso contrário, não.
     if (allowNegative) {
         value = value.replace(/[^0-9,-]/g, '');
     } else {
@@ -214,6 +214,34 @@ function convertMinutesToHours() {
     hoursInput.value = hours.toFixed(2);
 }
 
+function convertDaysToHours() {
+    const daysInput = document.getElementById('days');
+    const hoursDaysInput = document.getElementById('hoursDays');
+
+    if (daysInput.value.trim() === '') {
+        hoursDaysInput.value = '';
+        return;
+    }
+
+    const days = validateNumericInput(daysInput);
+    const hours = days * 24;
+    hoursDaysInput.value = hours.toFixed(2);
+}
+
+function convertHoursToDays() {
+    const hoursDaysInput = document.getElementById('hoursDays');
+    const daysInput = document.getElementById('days');
+
+    if (hoursDaysInput.value.trim() === '') {
+        daysInput.value = '';
+        return;
+    }
+
+    const hours = validateNumericInput(hoursDaysInput);
+    const days = hours / 24;
+    daysInput.value = days.toFixed(2);
+}
+
 // Função para carregar cotações
 async function loadExchangeRates() {
     try {
@@ -281,9 +309,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Conversões de tempo
     const hoursInput = document.getElementById('hours');
     const minutesInput = document.getElementById('minutes');
+    const daysInput = document.getElementById('days');
+    const hoursDaysInput = document.getElementById('hoursDays');
     
     hoursInput.addEventListener('input', convertHoursToMinutes);
     minutesInput.addEventListener('input', convertMinutesToHours);
+    daysInput.addEventListener('input', convertDaysToHours);
+    hoursDaysInput.addEventListener('input', convertHoursToDays);
 
     // Carrega as cotações ao inicializar
     loadExchangeRates();
